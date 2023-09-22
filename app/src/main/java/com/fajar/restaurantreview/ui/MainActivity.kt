@@ -18,6 +18,7 @@ import com.fajar.restaurantreview.data.response.Restaurant
 import com.fajar.restaurantreview.data.response.RestaurantResponse
 import com.fajar.restaurantreview.data.retrofit.ApiConfig
 import com.fajar.restaurantreview.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -58,6 +59,12 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.isLoading.observe(this){
             showLoading(it)
         }
+
+        mainViewModel.snackbarText.observe(this, {
+            it.getContentInfoNotHandled()?.let{
+                snackbarText ->  Snackbar.make(window.decorView.rootView,  snackbarText, Snackbar.LENGTH_SHORT).show()
+            }
+        })
 
         binding.btnSend.setOnClickListener { view ->
             mainViewModel.postReview(binding.edReview.text.toString())
