@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethod
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,6 +27,7 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val mainViewModel by viewModels<MainViewModel>()
 
     companion object {
         private const val TAG = "MainActivity"
@@ -39,10 +41,12 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        val mainViewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.NewInstanceFactory()
-        ).get(MainViewModel::class.java)
+
+//        val mainViewModel = ViewModelProvider(
+//            this,
+//            ViewModelProvider.NewInstanceFactory()
+//        ).get(MainViewModel::class.java)
+//
         mainViewModel.restaurant.observe(this) { restaurant ->
             setRestaurantData(restaurant)
         }
@@ -56,13 +60,13 @@ class MainActivity : AppCompatActivity() {
             setReviewData(consumerReviews)
         }
 
-        mainViewModel.isLoading.observe(this){
+        mainViewModel.isLoading.observe(this) {
             showLoading(it)
         }
 
         mainViewModel.snackbarText.observe(this, {
-            it.getContentInfoNotHandled()?.let{
-                snackbarText ->  Snackbar.make(window.decorView.rootView,  snackbarText, Snackbar.LENGTH_SHORT).show()
+            it.getContentInfoNotHandled()?.let { snackbarText ->
+                Snackbar.make(window.decorView.rootView, snackbarText, Snackbar.LENGTH_SHORT).show()
             }
         })
 
